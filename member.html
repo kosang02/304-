@@ -6,11 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>부대원 - 청소구역 조회</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
 ```
     body {
@@ -68,9 +64,7 @@
         transform: rotate(180deg);
     }
     
-    .content {
-        padding: 30px;
-    }
+    .content { padding: 30px; }
     
     .user-panel {
         background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
@@ -131,15 +125,8 @@
         margin: 10px;
     }
     
-    .notification-btn:hover {
-        background: white;
-        color: #667eea;
-    }
-    
-    .notification-btn.enabled {
-        background: #4CAF50;
-        border-color: #4CAF50;
-    }
+    .notification-btn:hover { background: white; color: #667eea; }
+    .notification-btn.enabled { background: #4CAF50; border-color: #4CAF50; }
     
     .areas-grid {
         display: grid;
@@ -162,23 +149,6 @@
     .area-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-    }
-    
-    .area-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transform: rotate(45deg);
-        animation: shimmer 3s infinite;
-    }
-    
-    @keyframes shimmer {
-        0% { transform: translateX(-100%) rotate(45deg); }
-        100% { transform: translateX(100%) rotate(45deg); }
     }
     
     .area-title {
@@ -234,9 +204,7 @@
         color: #2e7d32;
     }
     
-    .info-list li:last-child {
-        border-bottom: none;
-    }
+    .info-list li:last-child { border-bottom: none; }
     
     .notification {
         position: fixed;
@@ -252,13 +220,8 @@
         z-index: 1000;
     }
     
-    .notification.show {
-        transform: translateX(0);
-    }
-    
-    .notification.error {
-        background: #f44336;
-    }
+    .notification.show { transform: translateX(0); }
+    .notification.error { background: #f44336; }
     
     .last-update {
         text-align: center;
@@ -270,51 +233,9 @@
         border-radius: 10px;
     }
     
-    .firebase-error {
-        background: #ffebee;
-        color: #c62828;
-        padding: 20px;
-        border-radius: 15px;
-        margin-bottom: 20px;
-        border-left: 5px solid #f44336;
-        text-align: center;
-    }
-    
-    .retry-btn {
-        background: #f44336;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-    
     @media (max-width: 768px) {
-        .header h1 {
-            font-size: 1.8em;
-        }
-        
-        .refresh-btn {
-            position: relative;
-            top: auto;
-            right: auto;
-            margin-top: 15px;
-        }
-        
-        .areas-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .notification-panel {
-            padding: 20px 15px;
-        }
-        
-        .notification-btn {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-        }
+        .header h1 { font-size: 1.8em; }
+        .areas-grid { grid-template-columns: 1fr; }
     }
 </style>
 ```
@@ -324,9 +245,7 @@
     <div class="container">
         <div class="header">
             <h1>👥 부대원 - 청소구역 조회</h1>
-            <button class="refresh-btn" onclick="refreshData()" title="새로고침">
-                🔄
-            </button>
+            <button class="refresh-btn" onclick="refreshData()" title="새로고침">🔄</button>
         </div>
 
 ```
@@ -334,12 +253,6 @@
         <div class="user-panel">
             <h3>👤 현재 사용자: <span id="currentUserName">-</span></h3>
             <button class="change-user-btn" onclick="changeUser()">사용자 변경</button>
-        </div>
-
-        <div id="firebaseError" class="firebase-error" style="display: none;">
-            <h3>⚠️ Firebase 연결 실패</h3>
-            <p>관리자에게 Firebase 설정을 요청하거나 잠시 후 다시 시도해주세요.</p>
-            <button class="retry-btn" onclick="initializeFromUrl()">다시 시도</button>
         </div>
 
         <div class="status-panel">
@@ -363,9 +276,7 @@
         
         <h2 style="margin-bottom: 20px; color: #333; text-align: center;">📋 오늘의 청소구역</h2>
         
-        <div class="areas-grid" id="areasGrid">
-            <!-- 구역 카드들이 여기에 생성됩니다 -->
-        </div>
+        <div class="areas-grid" id="areasGrid"></div>
         
         <div class="info-section">
             <h3 style="color: #2e7d32; margin-bottom: 15px;">📢 안내사항</h3>
@@ -384,20 +295,13 @@
     </div>
 </div>
 
-<div class="notification" id="notification">
-    새로운 청소구역이 배정되었습니다!
-</div>
+<div class="notification" id="notification">새로운 청소구역이 배정되었습니다!</div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-    // 청소구역 (5개)
-    const areas = [
-        '생활관 1층', '생활관 2층', '화장실/세면장', 
-        '복도/계단', '외부청소'
-    ];
+    const areas = ['생활관 1층', '생활관 2층', '화장실/세면장', '복도/계단', '외부청소'];
     
     let currentAssignments = {};
     let currentUser = null;
@@ -406,12 +310,10 @@
     let database = null;
     let lastNotificationTimestamp = 0;
     
-    // 페이지 로드시 초기화
     window.addEventListener('load', function() {
         init();
     });
     
-    // 초기화
     function init() {
         loadCurrentUser();
         checkNotificationPermission();
@@ -419,55 +321,34 @@
         updateConnectionStatus(false, '연결 중...');
     }
     
-    // URL에서 Firebase 설정 가져오기 (관리자 페이지와 같은 도메인)
     function initializeFromUrl() {
-        // 같은 도메인의 관리자 설정을 사용하려고 시도
-        const adminUrl = window.location.origin + window.location.pathname.replace('member.html', 'admin.html');
-        
-        // localStorage에서 Firebase 설정 확인
         try {
             const savedConfig = localStorage.getItem('firebaseConfig');
             if (savedConfig) {
                 const config = JSON.parse(savedConfig);
                 initializeFirebase(config);
             } else {
-                // 설정이 없으면 URL 기반으로 추정
-                showFirebaseError();
+                updateConnectionStatus(false, 'Firebase 설정 필요');
             }
         } catch (error) {
-            showFirebaseError();
+            updateConnectionStatus(false, 'Firebase 설정 오류');
         }
     }
     
-    // Firebase 초기화
     function initializeFirebase(config) {
         try {
-            if (firebaseApp) {
-                firebaseApp.delete();
-            }
-            
+            if (firebaseApp) firebaseApp.delete();
             firebaseApp = firebase.initializeApp(config);
             database = firebase.database();
-            
             updateConnectionStatus(true, '연결됨');
             setupFirebaseListeners();
             loadDataFromFirebase();
-            
-            document.getElementById('firebaseError').style.display = 'none';
-            
         } catch (error) {
             console.error('Firebase 초기화 실패:', error);
-            showFirebaseError();
+            updateConnectionStatus(false, 'Firebase 연결 실패');
         }
     }
     
-    // Firebase 오류 표시
-    function showFirebaseError() {
-        updateConnectionStatus(false, 'Firebase 설정 필요');
-        document.getElementById('firebaseError').style.display = 'block';
-    }
-    
-    // 현재 사용자 로드
     function loadCurrentUser() {
         const savedUser = localStorage.getItem('memberCurrentUser');
         if (savedUser) {
@@ -478,7 +359,6 @@
         }
     }
     
-    // 사용자 변경
     function changeUser() {
         const userName = prompt('이름을 입력해주세요:', currentUser || '');
         if (userName && userName.trim()) {
@@ -489,7 +369,6 @@
         }
     }
     
-    // 알림 권한 확인
     function checkNotificationPermission() {
         if ('Notification' in window) {
             notificationPermission = Notification.permission;
@@ -500,7 +379,6 @@
         }
     }
     
-    // 알림 UI 업데이트
     function updateNotificationUI() {
         const btn = document.getElementById('notificationBtn');
         const status = document.getElementById('notificationStatus');
@@ -523,7 +401,6 @@
         }
     }
     
-    // 알림 토글
     function toggleNotifications() {
         if (!('Notification' in window)) {
             showNotification('이 브라우저는 알림을 지원하지 않습니다', 'error');
@@ -547,7 +424,6 @@
         });
     }
     
-    // 연결 상태 업데이트
     function updateConnectionStatus(isConnected, message) {
         const statusIndicator = document.getElementById('firebaseStatus');
         const statusText = document.getElementById('connectionStatus');
@@ -563,38 +439,32 @@
         document.getElementById('lastUpdate').textContent = new Date().toLocaleString('ko-KR');
     }
     
-    // Firebase에서 데이터 로드
     function loadDataFromFirebase() {
         if (!database) return;
         
-        database.ref('assignments').once('value')
-            .then((snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    currentAssignments = data;
-                    renderAreasGrid();
-                }
-            })
-            .catch((error) => {
-                console.error('데이터 로드 실패:', error);
-                showNotification('데이터 로드에 실패했습니다', 'error');
-            });
+        database.ref('assignments').once('value').then((snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                currentAssignments = data;
+                renderAreasGrid();
+            }
+        }).catch((error) => {
+            console.error('데이터 로드 실패:', error);
+            showNotification('데이터 로드에 실패했습니다', 'error');
+        });
         
-        database.ref('lastUpdated').once('value')
-            .then((snapshot) => {
-                const timestamp = snapshot.val();
-                if (timestamp) {
-                    document.getElementById('assignmentTime').textContent = 
-                        new Date(timestamp).toLocaleString('ko-KR');
-                }
-            });
+        database.ref('lastUpdated').once('value').then((snapshot) => {
+            const timestamp = snapshot.val();
+            if (timestamp) {
+                document.getElementById('assignmentTime').textContent = 
+                    new Date(timestamp).toLocaleString('ko-KR');
+            }
+        });
     }
     
-    // Firebase 리스너 설정
     function setupFirebaseListeners() {
         if (!database) return;
         
-        // 배정 변경 실시간 감지
         database.ref('assignments').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -605,7 +475,6 @@
                 if (hasChanges && Object.keys(currentAssignments).length > 0) {
                     showNotification('새로운 청소구역이 배정되었습니다!');
                     
-                    // 브라우저 알림
                     if (notificationPermission === 'granted') {
                         const assignedPeople = Object.values(currentAssignments).filter(person => person);
                         new Notification('🧹 청소구역 배정 알림', {
@@ -617,12 +486,10 @@
             }
         });
         
-        // 알림 감지
         database.ref('notification').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.timestamp > lastNotificationTimestamp) {
                 lastNotificationTimestamp = data.timestamp;
-                
                 showNotification(data.message || '새로운 알림이 있습니다');
                 
                 if (notificationPermission === 'granted') {
@@ -634,7 +501,6 @@
             }
         });
         
-        // 마지막 업데이트 시간 감지
         database.ref('lastUpdated').on('value', (snapshot) => {
             const timestamp = snapshot.val();
             if (timestamp) {
@@ -645,14 +511,12 @@
             }
         });
         
-        // 연결 상태 모니터링
         database.ref('.info/connected').on('value', (snapshot) => {
             const connected = snapshot.val();
             updateConnectionStatus(connected, connected ? '연결됨' : '연결 끊어짐');
         });
     }
     
-    // 구역 그리드 렌더링
     function renderAreasGrid() {
         const grid = document.getElementById('areasGrid');
         grid.innerHTML = '';
@@ -660,12 +524,9 @@
         areas.forEach(area => {
             const card = document.createElement('div');
             const assignedPerson = currentAssignments[area];
-            
-            // 현재 사용자가 배정된 구역인지 확인
             const isMyAssignment = assignedPerson === currentUser;
             
             card.className = `area-card ${isMyAssignment ? 'my-assignment' : ''}`;
-            
             card.innerHTML = `
                 <div class="area-title">
                     ${area} ${isMyAssignment ? '⭐' : ''}
@@ -679,7 +540,6 @@
         });
     }
     
-    // 데이터 새로고침
     function refreshData() {
         showNotification('데이터를 새로고침 중입니다...');
         
@@ -693,7 +553,6 @@
             database ? '새로고침 완료' : '연결 시도 중...');
     }
     
-    // 알림 표시
     function showNotification(message, type = 'success') {
         const notification = document.getElementById('notification');
         notification.textContent = message;
